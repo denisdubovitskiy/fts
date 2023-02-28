@@ -1,0 +1,10 @@
+{{ define "style" }}
+b.highlight {
+    color: blue;
+}
+p.snippet {
+    border: 1px grey dashed;
+    padding: 1em;
+    font-size: 14pt;
+}
+{{ end }}

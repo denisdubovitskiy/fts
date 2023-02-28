@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {{ template "header" }}
+  <title>Search results</title>
+</head>
+<body>
+{{ template "searchbox" . }}
+
+{{ template "pagination" . }}
+
+{{ range $result := .SearchResults }}
+    {{ range $snippet := $result.Snippets }}
+      <h4>
+        <a href="{{ fileurl $result.FileName }}">
+            {{ $result.FileName }}
+        </a>
+      </h4>
+
+      <p class="snippet">
+          {{ $snippet }}
+      </p>
+    {{ end }}
+{{ end }}
+
+{{ template "pagination" }}
+
+<script>
+    const resultsCount = {{ len .SearchResults }};
+    const prev = document.querySelectorAll(".button-prev")
+    const next = document.querySelectorAll(".button-next")
+    const params = new URLSearchParams(window.location.search);
+    const perPage = parseInt(params.get("per_page"));
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        if (params.get("page") === "1") {
+            prev.forEach((b) => {
+                b.setAttribute("disabled", "true");
+            });
+        }
+        if (resultsCount < perPage) {
+            next.forEach((b) => {
+                b.setAttribute("disabled", "true")
+            });
+        }
+    });
+
+    prev.forEach((b) => {
+        b.addEventListener("click", () => {
+            const page = parseInt(params.get("page"));
+            const prevPage = page - 1;
+            const perPage = params.get("per_page");
+            const query = params.get("query");
+
+            window.location.assign(`/search?page=${prevPage}&per_page=${perPage}&query=${query}`);
+        });
+    });
+
+    next.forEach((b) => {
+        b.addEventListener("click", () => {
+            const page = parseInt(params.get("page"));
+            const nextPage = page + 1;
+            const perPage = params.get("per_page");
+            const query = params.get("query")
+
+            window.location.assign(`/search?page=${nextPage}&per_page=${perPage}&query=${query}`);
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+{{ define "searchbox" }}
+  <h2 style="text-align:center">
+    Search in index "{{ .IndexName }}"
+  </h2>
+  <h2 style="text-align:center">
+    <form id="search-form">
+      <input type="text"
+             name="search_text"
+             size="40"
+             id="search-input">
+      <button>Search</button>
+    </form>
+  </h2>
+
+  <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const form = document.querySelector("#search-form");
+      const input = document.querySelector("#search-input");
+
+      let query = urlParams.get("query");
+      if (!query) {
+          query = "";
+      }
+      if (query.length > 0) {
+          input.value = query;
+      }
+
+      form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          window.location.assign(`/search?page=1&per_page=50&query=${input.value}`);
+      })
+  </script>
+{{ end }}
