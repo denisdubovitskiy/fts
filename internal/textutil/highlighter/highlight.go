@@ -14,7 +14,7 @@ func FindAll(opening, closing string, data []byte) []Highlight {
 		next    = opening
 	)
 
-	results := make([]Highlight, 0, 0)
+	results := make([]Highlight, 0)
 
 	for shift < len(data) {
 		phraseStartIdx := bytes.Index(data[shift:], []byte(next))

@@ -3,11 +3,12 @@ package indexer
 import (
 	"context"
 	"fmt"
-	"github.com/denisdubovitskiy/fts/internal/indexstore"
 	"io/fs"
 	"os"
 	"path/filepath"
 	"unicode/utf8"
+
+	"github.com/denisdubovitskiy/fts/internal/indexstore"
 )
 
 type Storage interface {
@@ -30,7 +31,11 @@ func New(storage Storage, path string) *Indexer {
 func (i *Indexer) Run(ctx context.Context) error {
 	var files []indexstore.File
 
-	walkErr := filepath.Walk(i.path, func(path string, info fs.FileInfo, err error) error {
+	walkErr := filepath.Walk(i.path, func(path string, info fs.FileInfo, e error) error {
+		if e != nil {
+			return e
+		}
+
 		if info.IsDir() {
 			return nil
 		}

@@ -3,6 +3,7 @@ package consoleindex
 import (
 	"context"
 	"fmt"
+
 	"github.com/denisdubovitskiy/fts/internal/indexer"
 	"github.com/denisdubovitskiy/fts/internal/indexstore"
 )

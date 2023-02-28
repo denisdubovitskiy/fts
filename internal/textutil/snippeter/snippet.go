@@ -18,7 +18,7 @@ type Options struct {
 }
 
 func ParseToSnippets(given string, opts Options) []string {
-	results := make([]string, 0, 0)
+	results := make([]string, 0)
 	content := []byte(given)
 
 	// Find all highlights which are highlighted by the datbase

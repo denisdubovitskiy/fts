@@ -57,11 +57,9 @@ func New(storage Storage, opts Options) *Server {
 
 	mux.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
 		s.renderIndexTemplate(writer)
-		return
 	})
 	mux.HandleFunc("/search", func(writer http.ResponseWriter, request *http.Request) {
 		s.renderSearchResults(writer, request)
-		return
 	})
 
 	mux.HandleFunc("/files/", func(writer http.ResponseWriter, request *http.Request) {
@@ -71,7 +69,7 @@ func New(storage Storage, opts Options) *Server {
 			http.Error(writer, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		writer.Write(content)
+		writer.Write(content) //nolint:errcheck
 	})
 
 	return s
@@ -85,7 +83,7 @@ func (s *Server) Run(ctx context.Context) error {
 	go func() {
 		<-ctx.Done()
 		log.Printf("server: shutdown signal received")
-		server.Shutdown(context.Background())
+		server.Shutdown(context.Background()) //nolint:errcheck
 	}()
 
 	log.Printf("server: listening at %s\n", s.opts.getAddr())
@@ -100,7 +98,7 @@ func (s *Server) Run(ctx context.Context) error {
 }
 
 func (s *Server) renderIndexTemplate(writer http.ResponseWriter) {
-	templates.RenderIndex(writer, templates.IndexData{
+	templates.RenderIndex(writer, templates.IndexData{ //nolint:errcheck
 		InputFilesRoot: s.opts.InputFilesRoot,
 		IndexName:      s.opts.IndexName,
 	})
@@ -139,7 +137,7 @@ func (s *Server) renderSearchResults(writer http.ResponseWriter, request *http.R
 		})
 	}
 
-	templates.RenderSearchResults(writer, templates.SearchResultsData{
+	templates.RenderSearchResults(writer, templates.SearchResultsData{ //nolint:errcheck
 		SearchResults: searchResults,
 		SearchText:    query,
 		IndexName:     s.opts.IndexName,
