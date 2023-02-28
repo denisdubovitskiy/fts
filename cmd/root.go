@@ -43,8 +43,8 @@ var indexCommand = &cobra.Command{
 		documentsPath := args[0]
 
 		provider := consoleindex.NewProvider(
-			cmd.Flag("index-name").Value.String(),
 			cmd.Flag("directory").Value.String(),
+			cmd.Flag("index-name").Value.String(),
 		)
 
 		return provider.Run(cmd.Context(), documentsPath)
