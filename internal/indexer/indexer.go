@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io/fs"
+	"log"
 	"os"
 	"path/filepath"
 	"unicode/utf8"
@@ -55,6 +56,9 @@ func (i *Indexer) Run(ctx context.Context) error {
 		})
 
 		if len(files) >= i.batchSize {
+			for _, f := range files {
+				log.Printf("indexer: indexing file %s\n", f)
+			}
 			if err := i.storage.InsertFiles(ctx, files); err != nil {
 				return fmt.Errorf("indexer: unable to insert files: %v", err)
 			}
@@ -68,6 +72,9 @@ func (i *Indexer) Run(ctx context.Context) error {
 	}
 
 	if len(files) > 0 {
+		for _, f := range files {
+			log.Printf("indexer: indexing file %s\n", f)
+		}
 		if err := i.storage.InsertFiles(ctx, files); err != nil {
 			return err
 		}
